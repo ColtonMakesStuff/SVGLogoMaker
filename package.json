@@ -2,5 +2,8 @@
   "dependencies": {
     "color-convert": "^2.0.1",
     "inquirer": "^8.2.4"
+  },
+  "devDependencies": {
+    "jest": "^29.6.3"
   }
 }
