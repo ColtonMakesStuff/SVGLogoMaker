@@ -49,7 +49,7 @@ Currently, there is no contribution guide for this project.
 ## Demo Video
 
 To see a video demonstration of how to use the application, please visit the following link:
-[Demo Video](https://www.example.com)
+[Demo Video](https://youtu.be/LM5_kqQ4dSo)
 
 Feel free to watch the video to understand how to use the application effectively.
 
