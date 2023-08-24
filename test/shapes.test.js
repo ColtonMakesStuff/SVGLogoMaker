@@ -1,30 +1,64 @@
+const { Shape, Square, Circle, Triangle } = require('../lib/shapes.js');
 const fs = require('fs');
-const Shape = require('../lib/shapes.js');
 
+describe('Shape', () => {
+  describe('renderLogo', () => {
+    test('should create an SVG file with the correct content', () => {
+      // Create an instance of Shape
+      const shape = new Shape('testShape', 'red', 'TXT', 'white');
+      
+      // Define the expected SVG content
+      const expectedSvgContent = `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+            <testShape fill="red" />
+            <text x="50%" y="50%" font-family="Verdana" font-size="35" fill="white" text-anchor="middle" dominant-baseline="middle">TXT</text>
+        </svg>`;
+      //~~~~~~~~~~~~~~~ GOT this part from phind ~~~~~~~~~~~~~~~
+      // Mock the fs.writeFile function to capture the arguments passed to it
+      jest.spyOn(fs, 'writeFile').mockImplementation((path, content, callback) => {
+        expect(path).toBe('./output/TXT.svg');
+        expect(content).toBe(expectedSvgContent);
+        callback(); // Call the callback function to simulate a successful write
+      });
+      
+      // Call the renderLogo method
+      shape.renderLogo();
+      
+      // Expect that fs.writeFile has been called
+      expect(fs.writeFile).toHaveBeenCalled();
+      
+      // Restore the original implementation of fs.writeFile
+      fs.writeFile.mockRestore();
+      //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    });
+  });
+});
 
-// circle.test.js
-const Circle = require('../lib/shapes.js');
+describe('Square', () => {
+  describe('constructor', () => {
+    test('should set the shape property to a rect element', () => {
+      const square = new Square('blue', 'TXT', 'white');
+      expect(square.shape).toBe('rect x="50" y="0" width="200" height="200"');
+      expect(square.text).toBe('TXT');
+    });
+  });
+});
 
 describe('Circle', () => {
-  describe("renderLogo", () => {
-    it("should take a user input and render a circle svg file", async () => {
-      // Arrange
-      const shapeColor = 'red';
-      const text = 'WOO';
-      const textColor = 'blue';
-      const outputPath = 'shape.svg';
+  describe('constructor', () => {
+    test('should set the shape property to a circle element', () => {
+      const circle = new Circle('green', 'TXT', 'white');
+      expect(circle.shape).toBe('circle cx="150" cy="100" r="100"');
+      expect(circle.text).toBe('TXT');
+    });
+  });
+});
 
-      // Act
-      const circleInstance = new Circle(shapeColor, text, textColor);
-      await circleInstance.renderLogo(outputPath);
-
-      // Assert
-      // Check if the SVG file was saved
-      expect(fs.writeFile).toHaveBeenCalledWith(outputPath, circleInstance.svgContent, expect.any(Function));
-
-      // Check if the console.log messages were called as expected
-      expect(console.log).toHaveBeenCalledWith(`Rendering a 300x200 svg logo with shape:<circle cx="150" cy="100" r="100" />, letters:${text} and colors ${shapeColor} for the shape and ${textColor} for the letters`);
-      expect(console.log).toHaveBeenCalledWith('SVG file has been saved.');
+describe('Triangle', () => {
+  describe('constructor', () => {
+    test('should set the shape property to a polygon element', () => {
+      const triangle = new Triangle('yellow', 'TXT', 'black');
+      expect(triangle.shape).toBe('polygon points="150,0 260,150 40,150"');
+      expect(triangle.text).toBe('TXT');
     });
   });
 });
